@@ -67,7 +67,7 @@ class MoeBotVacuumEntity(BaseMoeBotEntity, StateVacuumEntity):
         self._attr_supported_features |= VacuumEntityFeature.START
 
     @property
-    def state(self) -> str | None:
+    def activity(self) -> VacuumActivity | None:
         mb_state = self._moebot.state
         return _STATUS_TO_HA[mb_state]
 
