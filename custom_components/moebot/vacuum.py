@@ -12,7 +12,6 @@ from homeassistant.components.vacuum import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.icon import icon_for_battery_level
 from pymoebot import MoeBot
 
 from . import BaseMoeBotEntity
@@ -62,7 +61,6 @@ class MoeBotVacuumEntity(BaseMoeBotEntity, StateVacuumEntity):
         self._attr_supported_features |= VacuumEntityFeature.PAUSE
         self._attr_supported_features |= VacuumEntityFeature.STOP
         self._attr_supported_features |= VacuumEntityFeature.RETURN_HOME
-        self._attr_supported_features |= VacuumEntityFeature.BATTERY
         self._attr_supported_features |= VacuumEntityFeature.STATE
         self._attr_supported_features |= VacuumEntityFeature.START
 
@@ -70,19 +68,6 @@ class MoeBotVacuumEntity(BaseMoeBotEntity, StateVacuumEntity):
     def activity(self) -> VacuumActivity | None:
         mb_state = self._moebot.state
         return _STATUS_TO_HA[mb_state]
-
-    @property
-    def battery_icon(self) -> str:
-        """Return the battery icon for the vacuum cleaner."""
-        charging = bool(self._moebot.state == "CHARGING" or self._moebot.state == "CHARGING_WITH_TASK_SUSPEND")
-
-        return icon_for_battery_level(
-            battery_level=self.battery_level, charging=charging
-        )
-
-    @property
-    def battery_level(self) -> int | None:
-        return round(self._moebot.battery)
 
     def start(self) -> None:
         """Start or resume the cleaning task."""
