@@ -3,10 +3,13 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from homeassistant.components.vacuum import StateVacuumEntity, STATE_DOCKED, StateVacuumEntityDescription, \
-    STATE_CLEANING, STATE_RETURNING, STATE_ERROR, VacuumEntityFeature
+from homeassistant.components.vacuum import (
+    StateVacuumEntity,
+    StateVacuumEntityDescription,
+    VacuumActivity,
+    VacuumEntityFeature,
+)
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import STATE_IDLE
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.icon import icon_for_battery_level
@@ -16,16 +19,16 @@ from . import BaseMoeBotEntity
 from .const import DOMAIN
 
 _STATUS_TO_HA = {
-    "STANDBY": STATE_DOCKED,
-    "MOWING": STATE_CLEANING,
-    "CHARGING": STATE_DOCKED,
-    "EMERGENCY": STATE_ERROR,
-    "LOCKED": STATE_ERROR,
-    "PAUSED": STATE_IDLE,
-    "PARK": STATE_RETURNING,
-    "CHARGING_WITH_TASK_SUSPEND": STATE_DOCKED,
-    "FIXED_MOWING": STATE_CLEANING,
-    "ERROR": STATE_ERROR,
+    "STANDBY": VacuumActivity.DOCKED,
+    "MOWING": VacuumActivity.CLEANING,
+    "CHARGING": VacuumActivity.DOCKED,
+    "EMERGENCY": VacuumActivity.ERROR,
+    "LOCKED": VacuumActivity.ERROR,
+    "PAUSED": VacuumActivity.IDLE,
+    "PARK": VacuumActivity.RETURNING,
+    "CHARGING_WITH_TASK_SUSPEND": VacuumActivity.DOCKED,
+    "FIXED_MOWING": VacuumActivity.CLEANING,
+    "ERROR": VacuumActivity.ERROR,
 }
 
 _log = logging.getLogger(__package__)
